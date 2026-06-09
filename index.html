@@ -203,41 +203,102 @@ function renderTrend(trend) {
 }
 
 function renderCard(platform, displayName, stats, error, history) {
-  const cls = { youtube: 'yt', instagram: 'ig', tiktok: 'tt' }[platform] || platform;
-
   const subsKey = platform === 'youtube' ? 'youtube_subscribers' :
                   platform === 'instagram' ? 'instagram_followers' :
                   'tiktok_followers';
 
   let subs = stats?.followers ?? stats?.subscribers;
-  const views = stats?.total_views ?? stats?.total_likes;
-  const posts = stats?.total_videos ?? stats?.posts_count ?? stats?.videos?.length;
-
   const trend = computeTrend(history, subsKey);
   const trendHtml = subs != null ? renderTrend(trend) : '';
-
   const errorHtml = error ? `<div class="error-badge">${error}</div>` : '';
 
-  return `
-    <div class="card ${platform}">
-      <div class="platform-name">${displayName}</div>
-      ${subs != null ? `
-      <div class="stat-row">
-        <span class="stat-label">${platform === 'youtube' ? 'Subscribers' : 'Followers'}</span>
-        <span class="stat-value">${formatNumber(subs)}${trendHtml}</span>
-      </div>` : `<div class="stat-row"><span class="stat-label">Followers</span><span class="stat-value no-data">${error ? 'Error' : 'No data'}</span></div>`}
-      ${views != null ? `
-      <div class="stat-row">
-        <span class="stat-label">${platform === 'tiktok' ? 'Total Likes' : 'Total Views'}</span>
-        <span class="stat-value">${formatNumber(views)}</span>
-      </div>` : ''}
-      ${posts != null ? `
-      <div class="stat-row">
-        <span class="stat-label">${platform === 'instagram' ? 'Posts' : 'Videos'}</span>
-        <span class="stat-value">${formatNumber(posts)}</span>
-      </div>` : ''}
-      ${errorHtml}
-    </div>`;
+  // Instagram has special rich data from SocialInsider
+  if (platform === 'instagram') {
+    const eng = stats?.engagement_rate;
+    const views30 = stats?.total_views_30d;
+    const posts30 = stats?.total_posts_30d;
+    const avgLikes = stats?.avg_likes;
+    return `
+      <div class="card instagram">
+        <div class="platform-name">Instagram</div>
+        ${subs != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Followers</span>
+          <span class="stat-value">${formatNumber(subs)}${trendHtml}</span>
+        </div>` : `<div class="stat-row"><span class="stat-label">Followers</span><span class="stat-value no-data">${error ? 'Error' : 'No data'}</span></div>`}
+        ${eng != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Engagement Rate</span>
+          <span class="stat-value">${eng}%</span>
+        </div>` : ''}
+        ${views30 != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Views (30d)</span>
+          <span class="stat-value">${formatNumber(views30)}</span>
+        </div>` : ''}
+        ${avgLikes != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Avg. Likes</span>
+          <span class="stat-value">${avgLikes}</span>
+        </div>` : ''}
+        ${posts30 != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Posts (30d)</span>
+          <span class="stat-value">${posts30}</span>
+        </div>` : ''}
+        ${errorHtml}
+      </div>`;
+  }
+
+  // YouTube
+  if (platform === 'youtube') {
+    const views = stats?.total_views_scraped ?? stats?.total_views;
+    const posts = stats?.total_videos;
+    return `
+      <div class="card youtube">
+        <div class="platform-name">YouTube</div>
+        ${subs != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Subscribers</span>
+          <span class="stat-value">${formatNumber(subs)}${trendHtml}</span>
+        </div>` : `<div class="stat-row"><span class="stat-label">Subscribers</span><span class="stat-value no-data">${error ? 'Error' : 'No data'}</span></div>`}
+        ${views != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Total Views</span>
+          <span class="stat-value">${formatNumber(views)}</span>
+        </div>` : ''}
+        ${posts != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Videos</span>
+          <span class="stat-value">${formatNumber(posts)}</span>
+        </div>` : ''}
+        ${errorHtml}
+      </div>`;
+  }
+
+  // TikTok
+  {
+    const likes = stats?.total_likes;
+    return `
+      <div class="card tiktok">
+        <div class="platform-name">TikTok</div>
+        ${subs != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Followers</span>
+          <span class="stat-value">${formatNumber(subs)}${trendHtml}</span>
+        </div>` : `<div class="stat-row"><span class="stat-label">Followers</span><span class="stat-value no-data">${error ? 'Error' : 'No data'}</span></div>`}
+        ${likes != null ? `
+        <div class="stat-row">
+          <span class="stat-label">Total Likes</span>
+          <span class="stat-value">${formatNumber(likes)}</span>
+        </div>` : ''}
+        <div class="stat-row">
+          <span class="stat-label">Bio</span>
+          <span class="stat-value" style="font-size:12px;font-weight:400;">${stats?.bio ? stats.bio.substring(0, 40) + (stats.bio.length > 40 ? '...' : '') : '—'}</span>
+        </div>
+        ${errorHtml}
+      </div>`;
+  }
 }
 
 function renderChart(history) {
