@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIMN Social Analytics</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap');
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #0a0a0f;
+    color: #e0e0e0;
+    min-height: 100vh;
+  }
+
+  /* Broadcast header */
+  .header {
+    background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+    border-bottom: 1px solid #2a2a4a;
+    padding: 24px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    background: linear-gradient(90deg, #a855f7, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -0.5px;
+  }
+  .header .subtitle {
+    font-size: 13px;
+    color: #666;
+    font-weight: 400;
+  }
+  .header .time {
+    font-size: 13px;
+    color: #888;
+  }
+
+  /* Audience bar */
+  .audience-bar {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    padding: 32px;
+    text-align: center;
+    border-bottom: 1px solid #2a2a4a;
+  }
+  .audience-bar .total {
+    font-size: 56px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #a855f7, #6366f1, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .audience-bar .label {
+    font-size: 14px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+  .audience-bar .source {
+    font-size: 13px;
+    color: #555;
+    margin-top: 8px;
+  }
+
+  /* Stats grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    padding: 24px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .card {
+    background: linear-gradient(135deg, #14142a 0%, #1a1a2e 100%);
+    border: 1px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 24px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: #a855f7; }
+  .card .platform {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .card .platform .icon {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+  }
+  .youtube-icon { background: #ff000020; }
+  .instagram-icon { background: #e4405f20; }
+  .tiktok-icon { background: #ffffff10; }
+  .card .platform .name { font-size: 14px; font-weight: 600; color: #ccc; }
+  .card .stat { margin-bottom: 14px; }
+  .card .stat .value { font-size: 28px; font-weight: 700; color: #fff; }
+  .card .stat .desc { font-size: 12px; color: #666; margin-top: 2px; }
+  .card .row { display: flex; gap: 24px; flex-wrap: wrap; }
+  .card .row .stat { flex: 1; min-width: 80px; }
+  .card .row .stat .value { font-size: 20px; }
+
+  /* Chart section */
+  .chart-section {
+    padding: 24px 32px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .chart-section h2 {
+    font-size: 14px;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 16px;
+  }
+  .chart-card {
+    background: #14142a;
+    border: 1px solid #2a2a4a;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+  }
+  .chart-container {
+    position: relative;
+    height: 250px;
+  }
+
+  /* Status footer */
+  .status {
+    text-align: center;
+    padding: 16px;
+    font-size: 12px;
+    color: #444;
+    border-top: 1px solid #1a1a2e;
+  }
+  .status .live { color: #22c55e; }
+
+  @media (max-width: 900px) {
+    .grid { grid-template-columns: 1fr; padding: 16px; }
+    .header { flex-direction: column; gap: 8px; text-align: center; }
+    .audience-bar { padding: 24px; }
+    .audience-bar .total { font-size: 40px; }
+    .chart-section { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <h1>AIMN Analytics</h1>
+    <div class="subtitle">Social Media Performance Dashboard</div>
+  </div>
+  <div class="time" id="updateTime">Loading...</div>
+</div>
+
+<div class="audience-bar">
+  <div class="total" id="totalAudience">—</div>
+  <div class="label">Total Audience</div>
+  <div class="source">YouTube + Instagram + TikTok</div>
+</div>
+
+<div class="grid" id="platformCards">
+  <!-- Cards injected by JS -->
+</div>
+
+<div class="chart-section">
+  <h2>Followers Over Time (28 days)</h2>
+  <div class="chart-card">
+    <div class="chart-container">
+      <canvas id="followersChart"></canvas>
+    </div>
+  </div>
+
+  <h2>Views & Engagement</h2>
+  <div class="chart-card" style="display:grid; grid-template-columns: 1fr 1fr; gap: 24px;">
+    <div>
+      <div class="chart-container">
+        <canvas id="viewsChart"></canvas>
+      </div>
+    </div>
+    <div>
+      <div class="chart-container">
+        <canvas id="videosChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="status">
+  <span class="live">● LIVE</span> · Updated <span id="lastUpdate">—</span>
+</div>
+
+<script>
+// Chart.js defaults
+Chart.defaults.color = '#888';
+Chart.defaults.borderColor = '#2a2a4a';
+
+// Load CSV data
+async function loadCSV(path) {
+  const res = await fetch(path);
+  const text = await res.text();
+  const lines = text.trim().split('\n');
+  const headers = lines[0].split(',');
+  return lines.slice(1).map(line => {
+    const vals = line.split(',');
+    const row = {};
+    headers.forEach((h, i) => row[h.trim()] = vals[i] ? vals[i].trim() : '');
+    return row;
+  });
+}
+
+function fmt(n) {
+  if (!n || n === '') return '—';
+  const num = parseInt(n);
+  if (isNaN(num)) return n;
+  if (num >= 1000000) return (num/1000000).toFixed(1) + 'M';
+  if (num >= 1000) return (num/1000).toFixed(1) + 'K';
+  return num.toLocaleString();
+}
+
+async function init() {
+  const metrics = await loadCSV('data/metrics.csv');
+
+  // Latest row
+  const latest = metrics[metrics.length - 1];
+  const total = (parseInt(latest.youtube_subs) || 0) +
+                (parseInt(latest.instagram_followers) || 0) +
+                (parseInt(latest.tiktok_followers) || 0);
+  document.getElementById('totalAudience').textContent = fmt(total);
+
+  // Platform cards
+  const cardsHTML = `
+    <div class="card">
+      <div class="platform">
+        <div class="icon youtube-icon">▶</div>
+        <div class="name">YouTube</div>
+      </div>
+      <div class="stat">
+        <div class="value">${fmt(latest.youtube_subs)}</div>
+        <div class="desc">Subscribers</div>
+      </div>
+      <div class="row">
+        <div class="stat">
+          <div class="value">${fmt(latest.youtube_views_total)}</div>
+          <div class="desc">Total Views</div>
+        </div>
+        <div class="stat">
+          <div class="value">${fmt(latest.youtube_videos_total)}</div>
+          <div class="desc">Videos</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="platform">
+        <div class="icon instagram-icon">📷</div>
+        <div class="name">Instagram</div>
+      </div>
+      <div class="stat">
+        <div class="value">${fmt(latest.instagram_followers)}</div>
+        <div class="desc">Followers</div>
+      </div>
+      <div class="row">
+        <div class="stat">
+          <div class="value">${fmt(latest.instagram_posts || '—')}</div>
+          <div class="desc">Posts</div>
+        </div>
+        <div class="stat">
+          <div class="value">${latest.instagram_engagement_rate ? latest.instagram_engagement_rate + '%' : '—'}</div>
+          <div class="desc">Engagement Rate</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="platform">
+        <div class="icon tiktok-icon">♪</div>
+        <div class="name">TikTok</div>
+      </div>
+      <div class="stat">
+        <div class="value">${fmt(latest.tiktok_followers)}</div>
+        <div class="desc">Followers</div>
+      </div>
+      <div class="row">
+        <div class="stat">
+          <div class="value">${fmt(latest.tiktok_likes)}</div>
+          <div class="desc">Likes</div>
+        </div>
+        <div class="stat">
+          <div class="value">${fmt(latest.tiktok_videos)}</div>
+          <div class="desc">Videos</div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('platformCards').innerHTML = cardsHTML;
+
+  // Time
+  const now = new Date();
+  document.getElementById('updateTime').textContent = now.toLocaleString('en-US', {
+    month: 'short', day: 'numeric', year: 'numeric',
+    hour: '2-digit', minute: '2-digit'
+  });
+  document.getElementById('lastUpdate').textContent = latest.date;
+
+  // ── Followers Chart (28 days) ──
+  const labels = metrics.map(r => {
+    const d = r.date.split('-');
+    return d[1] + '/' + d[2];
+  });
+
+  new Chart(document.getElementById('followersChart'), {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'YouTube Subs',
+          data: metrics.map(r => parseInt(r.youtube_subs) || 0),
+          borderColor: '#ff4444',
+          backgroundColor: '#ff444420',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 2,
+        },
+        {
+          label: 'Instagram Followers',
+          data: metrics.map(r => parseInt(r.instagram_followers) || 0),
+          borderColor: '#e4405f',
+          backgroundColor: '#e4405f20',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 2,
+        },
+        {
+          label: 'TikTok Followers',
+          data: metrics.map(r => parseInt(r.tiktok_followers) || 0),
+          borderColor: '#00f2ea',
+          backgroundColor: '#00f2ea20',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 2,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 14 } },
+        y: { beginAtZero: true, grid: { color: '#1a1a2e' } }
+      }
+    }
+  });
+
+  // ── Views Chart ──
+  new Chart(document.getElementById('viewsChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'YT Views (total)',
+          data: metrics.map(r => parseInt(r.youtube_views_total) || 0),
+          backgroundColor: '#ff444460',
+          borderColor: '#ff4444',
+          borderWidth: 1,
+        },
+        {
+          label: 'TT Views',
+          data: metrics.map(r => parseInt(r.tiktok_views) || 0),
+          backgroundColor: '#00f2ea60',
+          borderColor: '#00f2ea',
+          borderWidth: 1,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 7 } },
+        y: { beginAtZero: true, grid: { color: '#1a1a2e' } }
+      }
+    }
+  });
+
+  // ── Videos / Content Count ──
+  new Chart(document.getElementById('videosChart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'YT Videos',
+          data: metrics.map(r => parseInt(r.youtube_videos_total) || 0),
+          backgroundColor: '#ff444460',
+          borderColor: '#ff4444',
+          borderWidth: 1,
+        },
+        {
+          label: 'TT Videos',
+          data: metrics.map(r => parseInt(r.tiktok_videos) || 0),
+          backgroundColor: '#00f2ea60',
+          borderColor: '#00f2ea',
+          borderWidth: 1,
+        },
+        {
+          label: 'IG Posts',
+          data: metrics.map(r => parseInt(r.instagram_posts) || 0),
+          backgroundColor: '#e4405f60',
+          borderColor: '#e4405f',
+          borderWidth: 1,
+        },
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { display: false }, ticks: { maxTicksLimit: 7 } },
+        y: { beginAtZero: true, grid: { color: '#1a1a2e' } }
+      }
+    }
+  });
+}
+
+init().catch(e => {
+  document.getElementById('totalAudience').textContent = 'ERR';
+  console.error(e);
+});
+</script>
+</body>
+</html>
