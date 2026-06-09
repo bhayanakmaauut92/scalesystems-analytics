@@ -1,14 +1,14 @@
 {
   "date": "2026-06-09",
-  "fetched_at": "2026-06-09T17:21:25.061581+00:00",
+  "fetched_at": "2026-06-09T17:37:43.459847+00:00",
   "youtube": {
     "error": null,
     "data": {
       "channel_name": "AIMN",
       "subscribers": 18,
       "total_videos": 15,
-      "total_views_scraped": 9813,
-      "fetched_at": "2026-06-09T17:21:25.061680+00:00"
+      "total_views_scraped": 9824,
+      "fetched_at": "2026-06-09T17:36:56.847961+00:00"
     },
     "videos": [
       {
@@ -16,7 +16,8 @@
         "title": "Will AI investors get their money back?",
         "published": "2026-06-09T16:38:48+00:00",
         "url": "https://youtube.com/watch?v=hP6wZTHTU-s",
-        "views": 144,
+        "thumbnail": "https://i.ytimg.com/vi/hP6wZTHTU-s/hqdefault.jpg",
+        "views": 157,
         "likes": null,
         "comments": null
       },
@@ -25,7 +26,8 @@
         "title": "PewDiePie's Odyssey Is the Future",
         "published": "2026-06-08T20:01:17+00:00",
         "url": "https://youtube.com/watch?v=FgqCdMVU1zc",
-        "views": 46,
+        "thumbnail": "https://i.ytimg.com/vi/FgqCdMVU1zc/hqdefault.jpg",
+        "views": 332,
         "likes": null,
         "comments": null
       },
@@ -34,6 +36,7 @@
         "title": "NVIDIA Is Building the AI PC",
         "published": "2026-06-08T10:42:21+00:00",
         "url": "https://youtube.com/watch?v=U3jmx5WNCOc",
+        "thumbnail": "https://i.ytimg.com/vi/U3jmx5WNCOc/hqdefault.jpg",
         "views": 1143,
         "likes": null,
         "comments": null
@@ -43,7 +46,8 @@
         "title": "The Robot Revolution Is Here",
         "published": "2026-06-07T11:00:38+00:00",
         "url": "https://youtube.com/watch?v=VNGIj2AyvOs",
-        "views": 625,
+        "thumbnail": "https://i.ytimg.com/vi/VNGIj2AyvOs/hqdefault.jpg",
+        "views": 1097,
         "likes": null,
         "comments": null
       },
@@ -52,7 +56,8 @@
         "title": "AI didn't appear overnight.",
         "published": "2026-06-06T09:00:52+00:00",
         "url": "https://youtube.com/watch?v=ofXUHOtxdlM",
-        "views": 1365,
+        "thumbnail": "https://i.ytimg.com/vi/ofXUHOtxdlM/hqdefault.jpg",
+        "views": 886,
         "likes": null,
         "comments": null
       },
@@ -61,7 +66,8 @@
         "title": "Who benefits from the value AI produces?",
         "published": "2026-06-06T04:00:43+00:00",
         "url": "https://youtube.com/watch?v=MrvreBR4BSk",
-        "views": 96,
+        "thumbnail": "https://i.ytimg.com/vi/MrvreBR4BSk/hqdefault.jpg",
+        "views": 826,
         "likes": null,
         "comments": null
       },
@@ -70,7 +76,8 @@
         "title": "Google Needs More Money for AI",
         "published": "2026-06-06T01:45:13+00:00",
         "url": "https://youtube.com/watch?v=AazW7LehX4o",
-        "views": 158,
+        "thumbnail": "https://i.ytimg.com/vi/AazW7LehX4o/hqdefault.jpg",
+        "views": 942,
         "likes": null,
         "comments": null
       },
@@ -79,7 +86,8 @@
         "title": "AI Is Destroying the Knowledge Barrier for Business Owners",
         "published": "2026-06-04T00:27:57+00:00",
         "url": "https://youtube.com/watch?v=Zga6dQqTA6c",
-        "views": 2294,
+        "thumbnail": "https://i.ytimg.com/vi/Zga6dQqTA6c/hqdefault.jpg",
+        "views": 99,
         "likes": null,
         "comments": null
       },
@@ -88,7 +96,8 @@
         "title": "Would you choose form over function when getting a robot?",
         "published": "2026-06-03T15:02:26+00:00",
         "url": "https://youtube.com/watch?v=j8w-IC5iZOk",
-        "views": 138,
+        "thumbnail": "https://i.ytimg.com/vi/j8w-IC5iZOk/hqdefault.jpg",
+        "views": 915,
         "likes": null,
         "comments": null
       },
@@ -97,7 +106,8 @@
         "title": "Can AI realistically be contained at this point?",
         "published": "2026-06-03T09:01:06+00:00",
         "url": "https://youtube.com/watch?v=CUbOkl3AZ6w",
-        "views": 726,
+        "thumbnail": "https://i.ytimg.com/vi/CUbOkl3AZ6w/hqdefault.jpg",
+        "views": 1091,
         "likes": null,
         "comments": null
       },
@@ -106,16 +116,18 @@
         "title": "Ferrari launching a $640,000 EV a risky move? | AIMN",
         "published": "2026-06-03T00:43:56+00:00",
         "url": "https://youtube.com/watch?v=r7ETb8W-H2s",
-        "views": 273,
+        "thumbnail": "https://i.ytimg.com/vi/r7ETb8W-H2s/hqdefault.jpg",
+        "views": 45,
         "likes": null,
         "comments": null
       },
       {
         "video_id": "ho48WfAIGAs",
-        "title": "The harder conversations about the economic and social implications",
+        "title": "The harder conversations about the economic and social implications of AI deserve more attention.",
         "published": "2026-06-02T08:30:40+00:00",
         "url": "https://youtube.com/watch?v=ho48WfAIGAs",
-        "views": 149,
+        "thumbnail": "https://i.ytimg.com/vi/ho48WfAIGAs/hqdefault.jpg",
+        "views": 1255,
         "likes": null,
         "comments": null
       },
@@ -124,7 +136,8 @@
         "title": "Google Omni Makes Professional Ads the New Baseline.",
         "published": "2026-06-02T01:19:12+00:00",
         "url": "https://youtube.com/watch?v=S1EEmAaILEU",
-        "views": 509,
+        "thumbnail": "https://i.ytimg.com/vi/S1EEmAaILEU/hqdefault.jpg",
+        "views": 419,
         "likes": null,
         "comments": null
       },
@@ -133,7 +146,8 @@
         "title": "Impacts of AI are not longer just a debate.",
         "published": "2026-06-01T09:01:10+00:00",
         "url": "https://youtube.com/watch?v=pufiPwFm13g",
-        "views": 555,
+        "thumbnail": "https://i.ytimg.com/vi/pufiPwFm13g/hqdefault.jpg",
+        "views": 215,
         "likes": null,
         "comments": null
       },
@@ -142,7 +156,8 @@
         "title": "Are early adopters of new tech just show offs?",
         "published": "2026-05-31T15:30:32+00:00",
         "url": "https://youtube.com/watch?v=EUB5w3PBAmE",
-        "views": 1737,
+        "thumbnail": "https://i.ytimg.com/vi/EUB5w3PBAmE/hqdefault.jpg",
+        "views": 402,
         "likes": null,
         "comments": null
       }
@@ -152,108 +167,53 @@
     "error": null,
     "data": {
       "handle": "aimn_live",
-      "display_name": "AIMN",
-      "bio": "\ud83d\ude80 We help Businesses 100X ROI in the first 3 months.\n\ud83d\udcc8 Scaled Facial Mania Med Spa from 1 to 20 locations.\n\ud83d\udcde Book Your Consultation Call Now",
+      "display_name": null,
       "followers": 131,
-      "following": 8,
-      "posts_count": 73,
-      "fetched_at": "2026-06-09T17:21:25.061701+00:00"
+      "engagement_rate": 2.97,
+      "avg_likes": 3.83,
+      "avg_comments": 0.06,
+      "total_posts_30d": 18,
+      "avg_posts_per_day": 0.6,
+      "total_engagement_30d": 70,
+      "total_views_30d": 4567,
+      "avg_views": 253.72,
+      "avg_engagement": 3.89,
+      "top_posts": [
+        {
+          "title": "NVIDIA Is Building the AI PC",
+          "type": "Reel",
+          "engagement_rate": 25.954
+        },
+        {
+          "title": "PewDiePie's Odyssey Is the Future",
+          "type": "Reel",
+          "engagement_rate": 19.847
+        },
+        {
+          "title": "Google Omni Makes Professional Ads the New Baseline.",
+          "type": "Reel",
+          "engagement_rate": 0.763
+        }
+      ],
+      "source": "socialinsider",
+      "bio": null
     },
-    "posts": [
-      {
-        "shortcode": "DZX0MytDG3g",
-        "caption": "Will AI investors get their money back?",
-        "likes": 1,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZX0MytDG3g/"
-      },
-      {
-        "shortcode": "DZVmlUnCfzl",
-        "caption": "PewDiePie's Odyssey Is the Future",
-        "likes": 26,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZVmlUnCfzl/"
-      },
-      {
-        "shortcode": "DZUmqOyAI4u",
-        "caption": "NVIDIA Is Building the AI PC",
-        "likes": 33,
-        "comments": 1,
-        "url": "https://instagram.com/p/DZUmqOyAI4u/"
-      },
-      {
-        "shortcode": "DZSD7ZIlCoV",
-        "caption": "The Robot Revolution Is Here",
-        "likes": 0,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZSD7ZIlCoV/"
-      },
-      {
-        "shortcode": "DZPRbEDkzny",
-        "caption": "AI didn't appear overnight.",
-        "likes": 1,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZPRbEDkzny/"
-      },
-      {
-        "shortcode": "DZOvE-VCTnK",
-        "caption": "Who benefits from the value AI produces?",
-        "likes": 0,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZOvE-VCTnK/"
-      },
-      {
-        "shortcode": "DZOfmUTFacb",
-        "caption": "Google Needs More Money for AI",
-        "likes": 1,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZOfmUTFacb/"
-      },
-      {
-        "shortcode": "DZJNMRwE3rC",
-        "caption": "AI Is Destroying the Knowledge Barrier for Business Owners",
-        "likes": 0,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZJNMRwE3rC/"
-      },
-      {
-        "shortcode": "DZIMcjAkXmv",
-        "caption": "Would you choose form over function when getting a robot?",
-        "likes": 0,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZIMcjAkXmv/"
-      },
-      {
-        "shortcode": "DZHjHnjgOO-",
-        "caption": "Can AI realistically be contained at this point?",
-        "likes": 0,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZHjHnjgOO-/"
-      },
-      {
-        "shortcode": "DZE607ogaq9",
-        "caption": "The harder conversations about the economic and social implications of AI deserv",
-        "likes": 1,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZE607ogaq9/"
-      },
-      {
-        "shortcode": "DZEJe56jZzN",
-        "caption": "Google Omni Makes Professional Ads the New Baseline.",
-        "likes": 1,
-        "comments": 0,
-        "url": "https://instagram.com/p/DZEJe56jZzN/"
-      }
-    ]
+    "posts": []
   },
   "tiktok": {
-    "error": "TikTok scraping blocked - requires browser automation (Playwright) or TikTok Business API. Their web API requires signed request tokens (X-Bogus) and session cookies that can't be obtained without a headless browser.",
+    "error": null,
     "data": {
-      "handle": "scalesystemai",
-      "followers": null,
-      "total_likes": null,
+      "handle": "scalesystems",
+      "display_name": "scalesystems",
+      "bio": "The growth toolkit.\nScaling your business with tech.",
+      "avatar": "https://www.tiktok.com/api/img/?userId=7638308304050275341&location=2&aid=1988",
+      "followers": 3,
+      "following": 4,
+      "total_likes": 0,
       "total_videos": null,
-      "fetched_at": "2026-06-09T17:21:25.061715+00:00"
+      "videos": [],
+      "fetched_at": "2026-06-09T17:37:19.602842+00:00",
+      "error": null
     },
     "videos": []
   }
