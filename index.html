@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ScaleSystems Analytics</title>
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --panel: #141414;
+    --border: #1e1e1e;
+    --gold: #ffd700;
+    --gold-dim: rgba(255, 215, 0, 0.15);
+    --text: #e0e0e0;
+    --text-dim: #888;
+    --green: #4ade80;
+    --red: #f87171;
+    --youtube: #ff0000;
+    --instagram: #e1306c;
+    --tiktok: #00f2ea;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+    min-height: 100vh;
+  }
+  .header {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 32px; padding-bottom: 16px; border-bottom: 1px solid var(--border);
+  }
+  .header h1 {
+    font-size: 22px; font-weight: 700; letter-spacing: 0.5px; color: var(--gold);
+  }
+  .header .subtitle {
+    font-size: 13px; color: var(--text-dim); margin-left: auto;
+  }
+  .header .last-updated {
+    font-size: 12px; color: var(--text-dim);
+  }
+
+  /* Platform Cards */
+  .cards {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;
+  }
+  .card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px;
+    position: relative; overflow: hidden;
+  }
+  .card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .card.youtube::before { background: var(--youtube); }
+  .card.instagram::before { background: var(--instagram); }
+  .card.tiktok::before { background: var(--tiktok); }
+
+  .card .platform-name {
+    font-size: 11px; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; opacity: 0.6;
+  }
+  .card .stat-row {
+    display: flex; justify-content: space-between; align-items: baseline; padding: 6px 0;
+  }
+  .card .stat-label {
+    font-size: 13px; color: var(--text-dim);
+  }
+  .card .stat-value {
+    font-size: 18px; font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+  .card .stat-value.no-data {
+    font-size: 14px; color: var(--text-dim); font-weight: 400;
+  }
+  .card .trend {
+    font-size: 13px; margin-left: 4px;
+  }
+  .card .trend.up { color: var(--green); }
+  .card .trend.down { color: var(--red); }
+  .card .trend.flat { color: var(--text-dim); }
+  .card .error-badge {
+    display: inline-block; background: rgba(248, 113, 113, 0.15); color: var(--red);
+    padding: 2px 8px; border-radius: 4px; font-size: 11px; margin-top: 8px;
+  }
+
+  /* Chart Section */
+  .chart-section {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 24px;
+  }
+  .chart-section h2 {
+    font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 16px;
+  }
+  canvas#followerChart {
+    width: 100%; height: 260px;
+  }
+
+  /* Top Posts */
+  .posts-section {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 20px;
+  }
+  .posts-section h2 {
+    font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 16px;
+  }
+  .post-row {
+    display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 13px;
+  }
+  .post-row:last-child { border-bottom: none; }
+  .post-platform {
+    width: 16px; height: 16px; border-radius: 4px; flex-shrink: 0;
+  }
+  .post-platform.yt { background: var(--youtube); }
+  .post-platform.ig { background: var(--instagram); }
+  .post-platform.tt { background: var(--tiktok); }
+  .post-title {
+    flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text);
+  }
+  .post-views {
+    font-variant-numeric: tabular-nums; font-weight: 600; min-width: 60px; text-align: right;
+  }
+  .post-engagement {
+    font-size: 11px; color: var(--text-dim); min-width: 50px; text-align: right;
+  }
+  .post-link {
+    color: var(--gold); text-decoration: none; font-size: 11px; opacity: 0.6;
+  }
+  .post-link:hover { opacity: 1; }
+
+  /* Total Follower Count */
+  .total-bar {
+    display: flex; gap: 32px; align-items: baseline; padding: 16px 20px;
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 24px;
+  }
+  .total-bar .total-label { font-size: 13px; color: var(--text-dim); }
+  .total-bar .total-value { font-size: 28px; font-weight: 700; color: var(--gold); }
+  .total-bar .total-breakdown { font-size: 12px; color: var(--text-dim); }
+  .total-bar .divider { width: 1px; height: 32px; background: var(--border); }
+
+  .loading { text-align: center; padding: 60px; color: var(--text-dim); }
+
+  @media (max-width: 768px) {
+    .cards { grid-template-columns: 1fr; }
+    .total-bar { flex-wrap: wrap; gap: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>SCALESYSTEMS</h1>
+  <span class="subtitle">SOCIAL ANALYTICS</span>
+  <span class="last-updated" id="lastUpdated">loading...</span>
+</div>
+
+<div id="content">
+  <div class="loading">Loading dashboard data...</div>
+</div>
+
+<script>
+const DATA_URLS = {
+  latest: 'data/latest.json',
+  history: 'data/history.json'
+};
+
+// Fallback paths for GitHub Pages
+const FALLBACK_URLS = {
+  latest: './data/latest.json',
+  history: './data/history.json'
+};
+
+function formatNumber(n) {
+  if (n === null || n === undefined) return '—';
+  if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n / 1e3).toFixed(1) + 'K';
+  return n.toLocaleString();
+}
+
+function formatDate(isoStr) {
+  if (!isoStr) return '';
+  return new Date(isoStr).toLocaleDateString('en-IN', {
+    day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+  });
+}
+
+function computeTrend(history, key) {
+  if (history.length < 2) return { direction: 'flat', change: 0, pct: 0 };
+  const latest = history[history.length - 1];
+  const prev = history[history.length - 2];
+  const cur = latest[key];
+  const old = prev[key];
+  if (cur == null || old == null || old === 0) return { direction: 'flat', change: 0, pct: 0 };
+  const change = cur - old;
+  const pct = (change / old) * 100;
+  return {
+    direction: change > 0 ? 'up' : change < 0 ? 'down' : 'flat',
+    change: change,
+    pct: pct
+  };
+}
+
+function renderTrend(trend) {
+  if (trend.direction === 'flat') return '<span class="trend flat">—</span>';
+  const sign = trend.direction === 'up' ? '+' : '';
+  const cls = trend.direction === 'up' ? 'up' : 'down';
+  return `<span class="trend ${cls}">${sign}${formatNumber(trend.change)} (${sign}${trend.pct.toFixed(1)}%)</span>`;
+}
+
+function renderCard(platform, displayName, stats, error, history) {
+  const cls = { youtube: 'yt', instagram: 'ig', tiktok: 'tt' }[platform] || platform;
+
+  const subsKey = platform === 'youtube' ? 'youtube_subscribers' :
+                  platform === 'instagram' ? 'instagram_followers' :
+                  'tiktok_followers';
+
+  let subs = stats?.followers ?? stats?.subscribers;
+  const views = stats?.total_views ?? stats?.total_likes;
+  const posts = stats?.total_videos ?? stats?.posts_count ?? stats?.videos?.length;
+
+  const trend = computeTrend(history, subsKey);
+  const trendHtml = subs != null ? renderTrend(trend) : '';
+
+  const errorHtml = error ? `<div class="error-badge">${error}</div>` : '';
+
+  return `
+    <div class="card ${platform}">
+      <div class="platform-name">${displayName}</div>
+      ${subs != null ? `
+      <div class="stat-row">
+        <span class="stat-label">${platform === 'youtube' ? 'Subscribers' : 'Followers'}</span>
+        <span class="stat-value">${formatNumber(subs)}${trendHtml}</span>
+      </div>` : `<div class="stat-row"><span class="stat-label">Followers</span><span class="stat-value no-data">${error ? 'Error' : 'No data'}</span></div>`}
+      ${views != null ? `
+      <div class="stat-row">
+        <span class="stat-label">${platform === 'tiktok' ? 'Total Likes' : 'Total Views'}</span>
+        <span class="stat-value">${formatNumber(views)}</span>
+      </div>` : ''}
+      ${posts != null ? `
+      <div class="stat-row">
+        <span class="stat-label">${platform === 'instagram' ? 'Posts' : 'Videos'}</span>
+        <span class="stat-value">${formatNumber(posts)}</span>
+      </div>` : ''}
+      ${errorHtml}
+    </div>`;
+}
+
+function renderChart(history) {
+  if (history.length < 2) return '';
+  const canvas = document.getElementById('followerChart');
+  if (!canvas) return '';
+  const ctx = canvas.getContext('2d');
+  const rect = canvas.parentElement.getBoundingClientRect();
+  canvas.width = canvas.parentElement.clientWidth * 2;
+  canvas.height = 260 * 2;
+  ctx.scale(2, 2);
+  const w = canvas.width / 2;
+  const h = canvas.height / 2;
+
+  const metrics = ['youtube_subscribers', 'instagram_followers', 'tiktok_followers'];
+  const colors = { youtube_subscribers: '#ff0000', instagram_followers: '#e1306c', tiktok_followers: '#00f2ea' };
+  const labels = { youtube_subscribers: 'YouTube', instagram_followers: 'Instagram', tiktok_followers: 'TikTok' };
+
+  // Filter to only metrics that have data
+  const activeMetrics = metrics.filter(m => history.some(h => h[m] != null));
+
+  ctx.clearRect(0, 0, w, h);
+
+  // Padding
+  const pad = { top: 20, bottom: 30, left: 10, right: 10 };
+  const chartW = w - pad.left - pad.right;
+  const chartH = h - pad.top - pad.bottom;
+
+  // Find max value
+  let maxVal = 0;
+  activeMetrics.forEach(m => {
+    history.forEach(h => { if (h[m] > maxVal) maxVal = h[m]; });
+  });
+  if (maxVal === 0) return '';
+  maxVal = Math.ceil(maxVal * 1.15);
+
+  const xStep = chartW / (history.length - 1 || 1);
+
+  // Draw grid lines
+  ctx.strokeStyle = '#1e1e1e';
+  ctx.lineWidth = 1;
+  for (let i = 0; i <= 4; i++) {
+    const y = pad.top + (chartH / 4) * i;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(w - pad.right, y); ctx.stroke();
+    ctx.fillStyle = '#555'; ctx.font = '10px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(formatNumber(maxVal - (maxVal / 4) * i), pad.left - 4, y + 3);
+  }
+
+  // Draw lines
+  activeMetrics.forEach((metric, mi) => {
+    ctx.strokeStyle = colors[metric];
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    let first = true;
+    history.forEach((h, i) => {
+      const val = h[metric];
+      if (val == null) return;
+      const x = pad.left + i * xStep;
+      const y = pad.top + chartH - (val / maxVal) * chartH;
+      if (first) { ctx.moveTo(x, y); first = false; }
+      else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Dot on latest
+    const last = history[history.length - 1];
+    if (last[metric] != null) {
+      const x = pad.left + (history.length - 1) * xStep;
+      const y = pad.top + chartH - (last[metric] / maxVal) * chartH;
+      ctx.fillStyle = colors[metric];
+      ctx.beginPath(); ctx.arc(x, y, 3, 0, Math.PI * 2); ctx.fill();
+
+      // Label
+      ctx.fillStyle = colors[metric];
+      ctx.font = '10px sans-serif';
+      ctx.textAlign = 'left';
+      ctx.fillText(`${labels[metric]}: ${formatNumber(last[metric])}`, x + 6, y + 3);
+    }
+  });
+
+  // X-axis labels (show first, middle, last)
+  ctx.fillStyle = '#555';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+  [0, Math.floor(history.length / 2), history.length - 1].forEach(i => {
+    const date = new Date(history[i].date + 'T00:00:00');
+    ctx.fillText(date.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }), pad.left + i * xStep, h - 4);
+  });
+}
+
+function renderPosts(snapshot) {
+  const posts = [];
+  const classes = { youtube: 'yt', instagram: 'ig', tiktok: 'tt' };
+
+  // YouTube
+  if (snapshot.youtube?.videos) {
+    snapshot.youtube.videos.slice(0, 5).forEach(v => {
+      const eng = v.views > 0 ? (v.likes / v.views * 100).toFixed(1) + '%' : '—';
+      posts.push({ platform: 'youtube', title: v.title, views: v.views, engagement: eng, url: v.url });
+    });
+  }
+
+  // Instagram
+  if (snapshot.instagram?.data?.recent_posts) {
+    snapshot.instagram.data.recent_posts.slice(0, 5).forEach(p => {
+      posts.push({
+        platform: 'instagram', title: p.caption || '(no caption)',
+        views: p.likes, engagement: p.comments ? p.comments + ' comments' : '—',
+        url: p.url
+      });
+    });
+  }
+
+  // TikTok
+  if (snapshot.tiktok?.data?.recent_videos) {
+    snapshot.tiktok.data.recent_videos.slice(0, 5).forEach(v => {
+      const eng = v.views > 0 ? (v.likes / v.views * 100).toFixed(1) + '%' : '—';
+      posts.push({ platform: 'tiktok', title: v.title || v.id, views: v.views, engagement: eng, url: v.url });
+    });
+  }
+
+  // Sort by views descending
+  posts.sort((a, b) => (b.views || 0) - (a.views || 0));
+
+  if (posts.length === 0) {
+    return '<div style="color: var(--text-dim); font-size: 13px;">No post data available yet. Run the aggregator first.</div>';
+  }
+
+  return posts.slice(0, 15).map(p => `
+    <div class="post-row">
+      <div class="post-platform ${classes[p.platform]}"></div>
+      <span class="post-title">${p.title}</span>
+      <span class="post-views">${formatNumber(p.views)}</span>
+      <span class="post-engagement">${p.engagement}</span>
+      <a class="post-link" href="${p.url}" target="_blank">→</a>
+    </div>
+  `).join('');
+}
+
+async function loadData(urls) {
+  let latest = null, history = null;
+
+  for (const [key, url] of Object.entries(urls)) {
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+      if (key === 'latest') latest = await resp.json();
+      else history = await resp.json();
+    } catch (e) {
+      console.warn(`Failed to fetch ${url}:`, e);
+    }
+  }
+
+  return { latest, history };
+}
+
+async function init() {
+  // Try primary URLs first, then fallback
+  let data = await loadData(DATA_URLS);
+  if (!data.latest) data = await loadData(FALLBACK_URLS);
+
+  const container = document.getElementById('content');
+  const { latest, history } = data;
+
+  if (!latest) {
+    container.innerHTML = `
+      <div class="loading">
+        <p>No data loaded yet.</p>
+        <p style="font-size: 13px; margin-top: 8px;">Set up your channel handles and run the aggregator to populate the dashboard.</p>
+      </div>`;
+    return;
+  }
+
+  document.getElementById('lastUpdated').textContent = 'Updated: ' + (latest.fetched_at ? formatDate(latest.fetched_at) : '—');
+
+  // Total follower count
+  const ytSubs = latest.youtube?.data?.subscribers;
+  const igFol = latest.instagram?.data?.followers;
+  const ttFol = latest.tiktok?.data?.followers;
+  const total = [ytSubs, igFol, ttFol].filter(n => n != null).reduce((a, b) => a + b, 0);
+  const breakdown = [ytSubs != null ? `YT: ${formatNumber(ytSubs)}` : null,
+                     igFol != null ? `IG: ${formatNumber(igFol)}` : null,
+                     ttFol != null ? `TT: ${formatNumber(ttFol)}` : null].filter(Boolean).join(' · ');
+
+  const hasHistory = history && history.length >= 2;
+
+  container.innerHTML = `
+    <div class="total-bar">
+      <span class="total-label">Total Audience</span>
+      <span class="total-value">${formatNumber(total)}</span>
+      <div class="divider"></div>
+      <span class="total-breakdown">${breakdown}</span>
+    </div>
+
+    <div class="cards">
+      ${renderCard('youtube', 'YouTube', latest.youtube?.data, latest.youtube?.error, hasHistory ? history : [])}
+      ${renderCard('instagram', 'Instagram', latest.instagram?.data, latest.instagram?.error, hasHistory ? history : [])}
+      ${renderCard('tiktok', 'TikTok', latest.tiktok?.data, latest.tiktok?.error, hasHistory ? history : [])}
+    </div>
+
+    ${hasHistory ? `
+    <div class="chart-section">
+      <h2>Followers Over Time</h2>
+      <canvas id="followerChart"></canvas>
+    </div>` : ''}
+
+    <div class="posts-section">
+      <h2>Top Posts by Views/Engagement</h2>
+      ${renderPosts(latest)}
+    </div>
+  `;
+
+  if (hasHistory) renderChart(history);
+}
+
+document.addEventListener('DOMContentLoaded', init);
+window.addEventListener('resize', () => {
+  const historyEl = document.getElementById('followerChart');
+  if (historyEl) setTimeout(init, 200);
+});
+</script>
+</body>
+</html>
